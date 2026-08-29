@@ -25,3 +25,5 @@ flo_curves.workspace = true
 resvg = "0.45"
 # Decode the sample photo for the spline-fitting regression test. Test-only.
 image = { version = "0.25", default-features = false, features = ["jpeg"] }
+[lib]
+crate-type = ["cdylib", "rlib"]
