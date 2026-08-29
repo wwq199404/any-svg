@@ -63,7 +63,7 @@ var presetConfigs = [
         length_threshold: 4,
         splice_threshold: 45,
         source: 'https://commons.wikimedia.org/wiki/File:K1_drawing.jpg',
-        credit: '<a href="https://commons.wikimedia.org/">Wikimedia</a>',
+        credit: '<a href="https://commons.wikimedia.org/">维基共享资源 (Wikimedia)</a>',
     },
     {
         src: 'assets/samples/Cityscape Sunset_DFM3-01.jpg',
@@ -78,7 +78,7 @@ var presetConfigs = [
         length_threshold: 4,
         splice_threshold: 45,
         source: 'https://www.vecteezy.com/vector-art/227400-beautiful-cityscape-at-sunset',
-        credit: '<a href="https://www.vecteezy.com/free-vector/building">Building Vectors by Vecteezy</a>',
+        credit: '<a href="https://www.vecteezy.com/free-vector/building">建筑矢量图由 Vecteezy 提供</a>',
     },
     {
         src: 'assets/samples/Gum Tree Vector.jpg',
@@ -93,7 +93,7 @@ var presetConfigs = [
         length_threshold: 4,
         splice_threshold: 45,
         source: 'https://www.vecteezy.com/vector-art/172177-gum-tree-vector',
-        credit: '<a href="https://www.vecteezy.com/free-vector/nature">Nature Vectors by Vecteezy</a>',
+        credit: '<a href="https://www.vecteezy.com/free-vector/nature">自然矢量图由 Vecteezy 提供</a>',
     },
     {
         src: 'assets/samples/vectorstock_31191940.png',
@@ -108,7 +108,7 @@ var presetConfigs = [
         length_threshold: 4,
         splice_threshold: 45,
         source: 'https://www.vectorstock.com/royalty-free-vector/dessert-poster-design-with-chocolate-cake-mousses-vector-31191940',
-        credit: '<a href="https://www.vectorstock.com/royalty-free-vector/dessert-poster-design-with-chocolate-cake-mousses-vector-31191940">Vector image by VectorStock / vectorstock</a>',
+        credit: '<a href="https://www.vectorstock.com/royalty-free-vector/dessert-poster-design-with-chocolate-cake-mousses-vector-31191940">矢量图由 VectorStock 提供</a>',
     },
     {
         src: 'assets/samples/angel-luciano-LATYeZyw88c-unsplash-s.jpg',
@@ -123,7 +123,7 @@ var presetConfigs = [
         length_threshold: 4,
         splice_threshold: 45,
         source: 'https://unsplash.com/photos/LATYeZyw88c',
-        credit: '<span>Photo by <a href="https://unsplash.com/@roaming_angel?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Angel Luciano</a> on <a href="https://unsplash.com/s/photos/dog?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></span>',
+        credit: '<span>摄影：<a href="https://unsplash.com/@roaming_angel?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Angel Luciano</a>，来源：<a href="https://unsplash.com/s/photos/dog?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></span>',
     },
     {
         src: 'assets/samples/tank-unit-preview.png',
@@ -138,7 +138,7 @@ var presetConfigs = [
         length_threshold: 4,
         splice_threshold: 45,
         source: 'https://opengameart.org/content/sideview-sci-fi-patreon-collection',
-        credit: '<span>Artwork by <a href="https://opengameart.org/content/sideview-sci-fi-patreon-collection">Luis Zuno</a> on <a href="https://opengameart.org/">opengameart.org</a></span>',
+        credit: '<span>画作：<a href="https://opengameart.org/content/sideview-sci-fi-patreon-collection">Luis Zuno</a>，来源：<a href="https://opengameart.org/">opengameart.org</a></span>',
     },
 ];
 
