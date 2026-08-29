@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>VTracer - 高精度专业矢量化工具</title>
+        <title>VTracer - 专业高精度矢量化工具</title>
         <link rel="apple-touch-icon" sizes="192x192" href="./assets/apple-icon.png">
         <link rel="icon" type="image/png" sizes="192x192" href="./assets/apple-icon.png">
         <style>
@@ -14,12 +14,12 @@
                 height: 100%;
                 margin: 0;
                 background-color: #121212;
-                color: #e0e0e0;
+                color: #e4e4e7;
                 font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
                 overflow: hidden;
             }
             
-            /* 顶部/左侧画布渲染区 */
+            /* 左侧画布渲染区 */
             #canvas-container {
                 position: absolute;
                 left: 0;
@@ -29,7 +29,7 @@
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                background: radial-gradient(circle at center, #1e1e1e 0%, #121212 100%);
+                background: radial-gradient(circle at center, #1c1c1e 0%, #121212 100%);
             }
             #drop {
                 width: 90%;
@@ -44,34 +44,34 @@
                 max-width: 100%;
                 max-height: 100%;
                 object-fit: contain;
-                border-radius: 4px;
-                box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+                border-radius: 6px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             }
             #svg > path:hover {
-                stroke: #39ff14;
+                stroke: #38bdf8;
                 stroke-width: 1.5px;
             }
             #droptext {
                 width: 100%;
                 height: 100%;
-                border: 2px dashed #333;
+                border: 2px dashed #27272a;
                 border-radius: 12px;
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
-                color: #777;
+                color: #71717a;
                 font-size: 15px;
                 background: rgba(255,255,255,0.01);
                 transition: all 0.3s ease;
             }
             #droptext.hovering {
-                border-color: #3b82f6;
-                background: rgba(59, 130, 246, 0.03);
-                color: #93c5fd;
+                border-color: #38bdf8;
+                background: rgba(56, 189, 248, 0.03);
+                color: #bae6fd;
             }
             #droptext a {
-                color: #3b82f6;
+                color: #38bdf8;
                 text-decoration: none;
                 font-weight: 500;
             }
@@ -79,7 +79,7 @@
                 text-decoration: underline;
             }
 
-            /* 右侧控制面板样式 */
+            /* 右侧控制面板样式（严格对齐官方 ID 与类名） */
             #options {
                 position: absolute;
                 right: 0;
@@ -88,6 +88,7 @@
                 height: 100%;
                 padding: 24px 20px;
                 background: #18181b;
+                border-left: 1px style #27272a;
                 border-left: 1px solid #27272a;
                 box-sizing: border-box;
                 overflow-y: auto;
@@ -101,33 +102,33 @@
                 border-radius: 3px;
             }
             
-            .option-group {
-                margin-bottom: 22px;
+            .option-block {
+                margin-bottom: 20px;
             }
-            .option-title {
+            .option-label {
                 font-weight: 600;
                 font-size: 13px;
-                color: #d4d4d8;
-                margin-bottom: 8px;
+                color: #e4e4e7;
+                margin-bottom: 6px;
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
             }
-            .option-title span {
+            .option-label span {
                 font-weight: normal;
                 font-size: 11px;
                 color: #71717a;
             }
 
-            /* 现代化主导出按钮 */
-            .button {
+            /* 导出按钮 */
+            #export {
                 cursor: pointer;
                 font-family: inherit;
                 font-weight: 600;
                 font-size: 14px;
                 border-radius: 6px;
                 border: none;
-                background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+                background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
                 color: #fff;
                 padding: 10px 16px;
                 width: 100%;
@@ -135,46 +136,39 @@
                 text-decoration: none;
                 display: block;
                 box-sizing: border-box;
-                box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+                box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
                 transition: all 0.2s ease;
             }
-            .button:hover {
-                background: linear-gradient(135deg, #60a5fa 0%, #2563eb 100%);
-                box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+            #export:hover {
+                background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
                 transform: translateY(-1px);
             }
 
-            /* 子选项卡/切换按钮 */
-            .btn-group {
-                display: flex;
-                gap: 6px;
-                background: #09090b;
-                padding: 3px;
-                border-radius: 6px;
-                border: 1px solid #27272a;
-            }
-            button.sub-btn {
-                flex: 1;
-                background: transparent;
-                border: none;
+            /* 切换按钮样式 */
+            #options button {
+                background: #27272a;
+                border: 1px solid #3f3f46;
                 color: #a1a1aa;
-                padding: 6px 10px;
+                padding: 6px 12px;
                 font-size: 12px;
                 font-weight: 500;
                 border-radius: 4px;
                 cursor: pointer;
                 transition: all 0.2s ease;
+                margin-right: 4px;
             }
-            button.sub-btn:hover {
+            #options button:hover {
                 color: #fff;
+                border-color: #71717a;
             }
-            button.sub-btn.selected {
-                background: #27272a;
+            #options button.selected {
+                background: #0284c7;
+                border-color: #0284c7;
                 color: #fff;
-                box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+                box-shadow: 0 2px 6px rgba(0,0,0,0.3);
             }
 
-            /* 精致滑块 */
+            /* 滑块控件样式 */
             input[type="range"] {
                 -webkit-appearance: none;
                 width: 100%;
@@ -189,25 +183,28 @@
                 width: 14px;
                 height: 14px;
                 border-radius: 50%;
-                background: #3b82f6;
+                background: #38bdf8;
                 cursor: pointer;
                 transition: transform 0.1s ease;
             }
             input[type="range"]::-webkit-slider-thumb:hover {
                 transform: scale(1.2);
             }
-            .value-display {
+            
+            /* 数值实时显示样式 */
+            #filterspecklevalue, #colorprecisionvalue, #layerdifferencevalue, #cornervalue, #lengthvalue, #splicevalue, #pathprecisionvalue {
                 font-size: 11px;
                 color: #71717a;
                 text-align: right;
                 font-variant-numeric: tabular-nums;
+                margin-bottom: 4px;
             }
 
             hr {
                 border: none;
                 height: 1px;
                 background: #27272a;
-                margin: 18px 0;
+                margin: 16px 0;
             }
         </style>
     </head>
@@ -215,15 +212,16 @@
     <body>
         <input type="file" id="imageInput" accept="image/*" style="display: none;">
         <div>
+            <!-- 进度条 -->
             <div id="progressregion" style="display: none; position: absolute; top: 0; left: 0; width: calc(100% - 340px); z-index: 10;">
-                <progress id="progressbar" value="0" max="100" style="width: 100%; height: 3px; accent-color: #3b82f6;"></progress>
+                <progress id="progressbar" value="0" max="100" style="width: 100%; height: 3px; accent-color: #38bdf8;"></progress>
             </div>
             
             <!-- 左侧画布渲染区 -->
             <div id="canvas-container">
                 <div id="drop">
                     <div id="droptext">
-                        <p style="margin: 0 0 8px 0;">将图片拖拽至此区域</p>
+                        <p style="margin: 0 0 6px 0;">将图片拖拽至此区域</p>
                         <p style="margin: 0; font-size: 13px;">或 <a href="#" id="imageSelect">浏览本地文件</a></p>
                     </div>
                     <canvas id="frame"></canvas>
@@ -231,71 +229,79 @@
                 </div>
             </div>
             
-            <!-- 右侧控制面板 -->
+            <!-- 右侧控制面板（完全还原 JS 依赖的类名和 ID） -->
             <div id="options">
-                <div class="option-group">
-                    <a class="button" id="export">导出 SVG 矢量图</a>
+                <div class="option-block">
+                    <a id="export">下载 SVG 文件</a>
                 </div>
 
                 <hr>
 
-                <div class="option-group">
-                    <div class="option-title">聚类算法</div>
-                    <div class="btn-group" style="margin-bottom: 8px;">
-                        <button id="clustering-binary" class="sub-btn" title="黑白二值化图像">黑白</button>
-                        <button id="clustering-color" class="sub-btn" title="真彩色图像">彩色</button>
+                <div class="option-block">
+                    <div class="option-label">聚类算法</div>
+                    <div style="margin-bottom: 6px;">
+                        <button id="clustering-binary" title="黑白二值化图像">黑白</button>
+                        <button id="clustering-color" title="真彩色图像">彩色</button>
                     </div>
-                    <div class="btn-group">
-                        <button id="clustering-cutout" class="sub-btn" title="色块互不重叠镂空">镂空</button>
-                        <button id="clustering-stacked" class="sub-btn" title="色块层叠交错">层叠</button>
+                    <div>
+                        <button id="clustering-cutout" title="色块互不重叠镂空">镂空</button>
+                        <button id="clustering-stacked" title="色块层叠交错">层叠</button>
                     </div>
                 </div>
 
-                <div class="option-group">
-                    <div class="option-title">过滤杂点 <span>(画面更干净)</span></div>
+                <div class="option-block">
+                    <div class="option-label">过滤杂点 <span>(画面更干净)</span></div>
+                    <div id="filterspecklevalue">4</div>
                     <input id="filterspeckle" type="range" min="1" max="16" step="1" value="4">
-                    <div id="filterspecklevalue" class="value-display">4 px</div>
                 </div>
 
-                <div class="option-group clustering-color-options">
-                    <div class="option-title">色彩精度 <span>(还原更准确)</span></div>
+                <!-- 官方 JS 依赖的控制类名 -->
+                <div class="option-block clustering-color-options">
+                    <div class="option-label">色彩精度 <span>(还原更准确)</span></div>
+                    <div id="colorprecisionvalue">6</div>
                     <input id="colorprecision" type="range" min="1" max="8" step="1" value="6">
-                    <div id="colorprecisionvalue" class="value-display">6 bits</div>
                 </div>
 
-                <div class="option-group clustering-color-options">
-                    <div class="option-title">渐变步长 <span>(层数更少)</span></div>
+                <div class="option-block clustering-color-options">
+                    <div class="option-label">渐变步长 <span>(层数更少)</span></div>
+                    <div id="layerdifferencevalue">16</div>
                     <input id="layerdifference" type="range" min="0" max="255" step="1" value="16">
-                    <div id="layerdifferencevalue" class="value-display">16</div>
                 </div>
 
                 <hr>
 
-                <div class="option-group">
-                    <div class="option-title">曲线拟合方式</div>
-                    <div class="btn-group">
-                        <button id="none" class="sub-btn" title="精确像素边界">像素</button>
-                        <button id="polygon" class="sub-btn" title="简化为多边形">多边形</button>
-                        <button id="spline" class="sub-btn selected" title="平滑曲线拟合">平滑曲线</button>
+                <div class="option-block">
+                    <div class="option-label">曲线拟合方式</div>
+                    <div>
+                        <button id="none" title="精确像素边界">像素</button>
+                        <button id="polygon" title="简化为多边形">多边形</button>
+                        <button id="spline" title="平滑曲线拟合">平滑曲线</button>
                     </div>
                 </div>
 
-                <div class="option-group spline-options">
-                    <div class="option-title">拐角阈值 <span>(边缘更平滑)</span></div>
+                <!-- 官方 JS 依赖的 spline 控制类名 -->
+                <div class="option-block spline-options">
+                    <div class="option-label">拐角阈值 <span>(边缘更平滑)</span></div>
+                    <div id="cornervalue">60</div>
                     <input id="corner" type="range" min="0" max="180" step="1" value="60">
-                    <div id="cornervalue" class="value-display">60°</div>
                 </div>
 
-                <div class="option-group spline-options">
-                    <div class="option-title">线段长度 <span>(轮廓更粗略)</span></div>
+                <div class="option-block spline-options">
+                    <div class="option-label">线段长度 <span>(轮廓更粗略)</span></div>
+                    <div id="lengthvalue">4</div>
                     <input id="length" type="range" min="3.5" max="10" step="0.5" value="4">
-                    <div id="lengthvalue" class="value-display">4</div>
                 </div>
 
-                <div class="option-group spline-options">
-                    <div class="option-title">拼接阈值 <span>(细节更精确)</span></div>
+                <div class="option-block spline-options">
+                    <div class="option-label">拼接阈值 <span>(细节更精确)</span></div>
+                    <div id="splicevalue">45</div>
                     <input id="splice" type="range" min="0" max="180" step="1" value="45">
-                    <div id="splicevalue" class="value-display">45°</div>
+                </div>
+
+                <!-- 隐藏的路径精度，保持原版 JS 逻辑完整 -->
+                <div style="display: none;">
+                    <div id="pathprecisionvalue">8</div>
+                    <input id="pathprecision" type="range" min="0" max="16" step="1" value="8">
                 </div>
             </div>
         </div>
