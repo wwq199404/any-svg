@@ -45,7 +45,7 @@ document.getElementById('export').addEventListener('click', function (e) {
     this.href = url;
     this.target = '_blank';
 
-    this.download = 'export-' + new Date().toISOString().slice(0, 19).replace(/:/g, '').replace('T', ' ') + '.svg';
+    this.download = '矢量图-' + new Date().toISOString().slice(0, 19).replace(/:/g, '').replace('T', ' ') + '.svg';
 });
 
 // Store template config
