@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
     <head>
         <meta charset="utf-8">
-        <title>VTracer - 专业高精度矢量化工具</title>
+        <title>VTracer - 高精度专业矢量化工具</title>
         <link rel="apple-touch-icon" sizes="192x192" href="./assets/apple-icon.png">
         <link rel="icon" type="image/png" sizes="192x192" href="./assets/apple-icon.png">
         <style>
@@ -13,27 +13,27 @@
                 width: 100%;
                 height: 100%;
                 margin: 0;
-                background-color: #121212;
-                color: #e4e4e7;
+                background-color: #0d0d0f;
+                color: #f4f4f5;
                 font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
                 overflow: hidden;
             }
             
-            /* 左侧画布渲染区 */
+            /* 左侧画布沉浸式渲染区 */
             #canvas-container {
                 position: absolute;
                 left: 0;
                 top: 0;
-                width: calc(100% - 340px);
+                width: calc(100% - 360px);
                 height: 100%;
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                background: radial-gradient(circle at center, #1c1c1e 0%, #121212 100%);
+                background: radial-gradient(circle at center, #18181b 0%, #0d0d0f 100%);
             }
             #drop {
-                width: 90%;
-                height: 90%;
+                width: 92%;
+                height: 92%;
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -44,12 +44,12 @@
                 max-width: 100%;
                 max-height: 100%;
                 object-fit: contain;
-                border-radius: 6px;
-                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+                border-radius: 8px;
+                box-shadow: 0 20px 40px rgba(0,0,0,0.6);
             }
             #svg > path:hover {
                 stroke: #38bdf8;
-                stroke-width: 1.5px;
+                stroke-width: 2px;
             }
             #droptext {
                 width: 100%;
@@ -67,7 +67,7 @@
             }
             #droptext.hovering {
                 border-color: #38bdf8;
-                background: rgba(56, 189, 248, 0.03);
+                background: rgba(56, 189, 248, 0.04);
                 color: #bae6fd;
             }
             #droptext a {
@@ -79,56 +79,90 @@
                 text-decoration: underline;
             }
 
-            /* 右侧控制面板样式（严格对齐官方 ID 与类名） */
+            /* 右侧专业级卡片式控制面板 */
             #options {
                 position: absolute;
                 right: 0;
                 top: 0;
-                width: 340px;
+                width: 360px;
                 height: 100%;
-                padding: 24px 20px;
-                background: #18181b;
-                border-left: 1px style #27272a;
-                border-left: 1px solid #27272a;
+                padding: 20px;
+                background: #121215;
+                border-left: 1px solid #1e1e24;
                 box-sizing: border-box;
                 overflow-y: auto;
-                box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+                box-shadow: -12px 0 35px rgba(0,0,0,0.6);
             }
             #options::-webkit-scrollbar {
-                width: 6px;
+                width: 5px;
             }
             #options::-webkit-scrollbar-thumb {
-                background: #3f3f46;
+                background: #27272a;
                 border-radius: 3px;
             }
             
-            .option-block {
-                margin-bottom: 20px;
+            /* 品牌头部标题栏 */
+            .app-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding-bottom: 14px;
+                margin-bottom: 16px;
+                border-bottom: 1px solid #1e1e24;
             }
+            .app-title {
+                font-size: 15px;
+                font-weight: 700;
+                color: #fff;
+                letter-spacing: 0.5px;
+            }
+            .app-subtitle {
+                font-size: 11px;
+                color: #71717a;
+                background: #18181b;
+                padding: 2px 6px;
+                border-radius: 4px;
+                border: 1px solid #27272a;
+            }
+
+            /* 模块卡片容器 */
+            .option-block {
+                background: #18181b;
+                border: 1px solid #222226;
+                border-radius: 8px;
+                padding: 14px;
+                margin-bottom: 14px;
+                transition: border-color 0.2s ease;
+            }
+            .option-block:hover {
+                border-color: #2f2f35;
+            }
+
             .option-label {
                 font-weight: 600;
-                font-size: 13px;
-                color: #e4e4e7;
-                margin-bottom: 6px;
+                font-size: 12px;
+                color: #d4d4d8;
+                margin-bottom: 8px;
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
             }
             .option-label span {
                 font-weight: normal;
-                font-size: 11px;
+                font-size: 10px;
                 color: #71717a;
             }
 
-            /* 导出按钮 */
+            /* 现代高光导出按钮 */
             #export {
                 cursor: pointer;
                 font-family: inherit;
                 font-weight: 600;
-                font-size: 14px;
+                font-size: 13px;
                 border-radius: 6px;
                 border: none;
-                background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+                background: linear-gradient(135deg, #0284c7 0%, #0284c7 100%);
+                background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
                 color: #fff;
                 padding: 10px 16px;
                 width: 100%;
@@ -136,43 +170,55 @@
                 text-decoration: none;
                 display: block;
                 box-sizing: border-box;
-                box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+                box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);
                 transition: all 0.2s ease;
             }
             #export:hover {
-                background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+                background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+                box-shadow: 0 6px 18px rgba(2, 132, 199, 0.5);
                 transform: translateY(-1px);
             }
 
-            /* 切换按钮样式 */
+            /* 选项切换按钮组 */
+            .btn-group-2 {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 6px;
+            }
+            .btn-group-3 {
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 6px;
+            }
             #options button {
-                background: #27272a;
-                border: 1px solid #3f3f46;
+                background: #1f1f23;
+                border: 1px solid #2e2e35;
                 color: #a1a1aa;
-                padding: 6px 12px;
+                padding: 6px 0;
                 font-size: 12px;
                 font-weight: 500;
-                border-radius: 4px;
+                border-radius: 5px;
                 cursor: pointer;
                 transition: all 0.2s ease;
-                margin-right: 4px;
+                text-align: center;
             }
             #options button:hover {
                 color: #fff;
-                border-color: #71717a;
+                background: #27272b;
+                border-color: #3f3f46;
             }
             #options button.selected {
                 background: #0284c7;
-                border-color: #0284c7;
+                border-color: #38bdf8;
                 color: #fff;
-                box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+                box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
             }
 
-            /* 滑块控件样式 */
+            /* 滑块控件 */
             input[type="range"] {
                 -webkit-appearance: none;
                 width: 100%;
-                height: 6px;
+                height: 5px;
                 background: #27272a;
                 border-radius: 3px;
                 outline: none;
@@ -180,31 +226,24 @@
             }
             input[type="range"]::-webkit-slider-thumb {
                 -webkit-appearance: none;
-                width: 14px;
-                height: 14px;
+                width: 13px;
+                height: 13px;
                 border-radius: 50%;
                 background: #38bdf8;
                 cursor: pointer;
+                box-shadow: 0 0 8px rgba(56, 189, 248, 0.5);
                 transition: transform 0.1s ease;
             }
             input[type="range"]::-webkit-slider-thumb:hover {
-                transform: scale(1.2);
+                transform: scale(1.25);
             }
             
-            /* 数值实时显示样式 */
+            /* 数值统计展示 */
             #filterspecklevalue, #colorprecisionvalue, #layerdifferencevalue, #cornervalue, #lengthvalue, #splicevalue, #pathprecisionvalue {
                 font-size: 11px;
                 color: #71717a;
                 text-align: right;
                 font-variant-numeric: tabular-nums;
-                margin-bottom: 4px;
-            }
-
-            hr {
-                border: none;
-                height: 1px;
-                background: #27272a;
-                margin: 16px 0;
             }
         </style>
     </head>
@@ -212,8 +251,8 @@
     <body>
         <input type="file" id="imageInput" accept="image/*" style="display: none;">
         <div>
-            <!-- 进度条 -->
-            <div id="progressregion" style="display: none; position: absolute; top: 0; left: 0; width: calc(100% - 340px); z-index: 10;">
+            <!-- 顶部纤细进度条 -->
+            <div id="progressregion" style="display: none; position: absolute; top: 0; left: 0; width: calc(100% - 360px); z-index: 10;">
                 <progress id="progressbar" value="0" max="100" style="width: 100%; height: 3px; accent-color: #38bdf8;"></progress>
             </div>
             
@@ -221,29 +260,32 @@
             <div id="canvas-container">
                 <div id="drop">
                     <div id="droptext">
-                        <p style="margin: 0 0 6px 0;">将图片拖拽至此区域</p>
-                        <p style="margin: 0; font-size: 13px;">或 <a href="#" id="imageSelect">浏览本地文件</a></p>
+                        <p style="margin: 0 0 6px 0; font-weight: 500;">将图片拖拽至此区域</p>
+                        <p style="margin: 0; font-size: 12px; color: #52525b;">支持 PNG / JPG / WebP 或 <a href="#" id="imageSelect">浏览文件</a></p>
                     </div>
                     <canvas id="frame"></canvas>
                     <svg id="svg" version="1.1" xmlns="http://www.w3.org/2000/svg"></svg>
                 </div>
             </div>
             
-            <!-- 右侧控制面板（完全还原 JS 依赖的类名和 ID） -->
+            <!-- 右侧控制面板 -->
             <div id="options">
-                <div class="option-block">
-                    <a id="export">下载 SVG 文件</a>
+                <div class="app-header">
+                    <span class="app-title">⚡ VTracer Studio</span>
+                    <span class="app-subtitle">中文增强版</span>
                 </div>
 
-                <hr>
+                <div class="option-block" style="background: transparent; border: none; padding: 0; margin-bottom: 12px;">
+                    <a id="export">导出 SVG 矢量图</a>
+                </div>
 
                 <div class="option-block">
-                    <div class="option-label">聚类算法</div>
-                    <div style="margin-bottom: 6px;">
+                    <div class="option-label">聚类算法模式</div>
+                    <div class="btn-group-2" style="margin-bottom: 6px;">
                         <button id="clustering-binary" title="黑白二值化图像">黑白</button>
                         <button id="clustering-color" title="真彩色图像">彩色</button>
                     </div>
-                    <div>
+                    <div class="btn-group-2">
                         <button id="clustering-cutout" title="色块互不重叠镂空">镂空</button>
                         <button id="clustering-stacked" title="色块层叠交错">层叠</button>
                     </div>
@@ -255,7 +297,6 @@
                     <input id="filterspeckle" type="range" min="1" max="16" step="1" value="4">
                 </div>
 
-                <!-- 官方 JS 依赖的控制类名 -->
                 <div class="option-block clustering-color-options">
                     <div class="option-label">色彩精度 <span>(还原更准确)</span></div>
                     <div id="colorprecisionvalue">6</div>
@@ -268,18 +309,15 @@
                     <input id="layerdifference" type="range" min="0" max="255" step="1" value="16">
                 </div>
 
-                <hr>
-
                 <div class="option-block">
-                    <div class="option-label">曲线拟合方式</div>
-                    <div>
+                    <div class="option-label">曲线拟合引擎</div>
+                    <div class="btn-group-3">
                         <button id="none" title="精确像素边界">像素</button>
                         <button id="polygon" title="简化为多边形">多边形</button>
                         <button id="spline" title="平滑曲线拟合">平滑曲线</button>
                     </div>
                 </div>
 
-                <!-- 官方 JS 依赖的 spline 控制类名 -->
                 <div class="option-block spline-options">
                     <div class="option-label">拐角阈值 <span>(边缘更平滑)</span></div>
                     <div id="cornervalue">60</div>
@@ -298,7 +336,7 @@
                     <input id="splice" type="range" min="0" max="180" step="1" value="45">
                 </div>
 
-                <!-- 隐藏的路径精度，保持原版 JS 逻辑完整 -->
+                <!-- 隐藏的路径精度参数 -->
                 <div style="display: none;">
                     <div id="pathprecisionvalue">8</div>
                     <input id="pathprecision" type="range" min="0" max="16" step="1" value="8">
