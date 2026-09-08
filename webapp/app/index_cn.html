@@ -105,22 +105,26 @@
                 border-radius: 8px;
                 box-shadow: 0 20px 40px rgba(0,0,0,0.6);
             }
+
+            /* 终极解决大小不一致：让原图预览层直接与官方的 #frame (底层Canvas) 共享百分百完全相同的尺寸逻辑 */
+            #original-preview-overlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+                border-radius: 8px;
+                box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+                z-index: 45;
+                display: none; 
+                background: #0d0d0f;
+                pointer-events: none;
+            }
+
             #svg > path:hover {
                 stroke: #38bdf8;
                 stroke-width: 2px;
-            }
-
-            /* 绝对管用的原图悬浮预览层 (默认隐藏) */
-            #original-preview-overlay {
-                position: absolute;
-                max-width: 100%;
-                max-height: 100%;
-                object-fit: contain;
-                border-radius: 8px;
-                box-shadow: 0 20px 40px rgba(0,0,0,0.8);
-                z-index: 40;
-                display: none; /* 默认不显示 */
-                background: #0d0d0f;
             }
 
             #droptext {
@@ -405,10 +409,11 @@
                         <p style="margin: 0 0 6px 0; font-weight: 500;">将图片拖拽至此区域</p>
                         <p style="margin: 0; font-size: 12px; color: #52525b;">支持 PNG / JPG / WebP 或 <a href="#" id="imageSelect">浏览文件</a></p>
                     </div>
+                    <!-- 底层渲染画布，用作尺寸基准 -->
                     <canvas id="frame"></canvas>
-                    <svg id="svg" version="1.1" xmlns="http://www.w3.org/2000/svg"></svg>
-                    <!-- 独立拦截的预览图片层 -->
+                    <!-- 终极完美的尺寸同步原图层，直接跟随 #frame 的尺寸和位置渲染 -->
                     <img id="original-preview-overlay" alt="Original Preview">
+                    <svg id="svg" version="1.1" xmlns="http://www.w3.org/2000/svg"></svg>
                 </div>
             </div>
             
@@ -490,32 +495,32 @@
                 
                 <div class="option-block" style="background: rgba(56, 189, 248, 0.05); border-color: rgba(56, 189, 248, 0.2);">
                     <div class="option-label" style="color: #38bdf8; font-size: 13px; margin-bottom: 12px;">
-                        💡 一键“抄作业”预设 (点击应用)
+                        💡 工业级一键“抄作业”预设 (终极方案)
                     </div>
                     
                     <div class="preset-card" onclick="applyPreset('logo')">
                         <div class="preset-card-title">✨ 放大 Logo / 图标 <span>点击应用</span></div>
-                        <div class="preset-card-desc">自动调整为高清圆润，保住小弧线，抹除微小噪点。</div>
+                        <div class="preset-card-desc">彩色层叠 + 平滑曲线，线段缩至极短，弧线圆润丝滑。</div>
                     </div>
                     
                     <div class="preset-card" onclick="applyPreset('qr')">
-                        <div class="preset-card-title">🔳 放大二维码 <span>点击应用</span></div>
-                        <div class="preset-card-desc">自动调整为绝对方正锐利，保留所有关键小黑点。</div>
+                        <div class="preset-card-title">🔳 精准二维码 (防缺角/带Logo) <span>点击应用</span></div>
+                        <div class="preset-card-desc">彩色镂空 + 像素边界，杂点锁死1，色彩拉满8，绝无缺角。</div>
                     </div>
 
                     <div class="preset-card" onclick="applyPreset('sketch')">
                         <div class="preset-card-title">✏️ 提取手绘线稿 / 签名 <span>点击应用</span></div>
-                        <div class="preset-card-desc">自动连接断掉的笔画，强制抹掉背景纸张阴影。</div>
+                        <div class="preset-card-desc">黑白二值化，拼接阈值拉高80连通笔画，擦除纸张阴影。</div>
                     </div>
 
                     <div class="preset-card" onclick="applyPreset('photo')">
                         <div class="preset-card-title">📸 照片 / 复杂插画 <span>点击应用</span></div>
-                        <div class="preset-card-desc">色彩精度拉满，色彩过渡更自然逼真。</div>
+                        <div class="preset-card-desc">色彩精度拉满8，渐变步长压到8，色阶极度细腻逼真。</div>
                     </div>
 
                     <div class="preset-card" onclick="applyPreset('noisy')">
                         <div class="preset-card-title">👻 抢救模糊包浆图 <span>点击应用</span></div>
-                        <div class="preset-card-desc">强行抹掉马赛克噪点，无视原本坑坑洼洼的边缘。</div>
+                        <div class="preset-card-desc">杂点拉高14强行洗掉马赛克，线段长度8平滑坑洼边缘。</div>
                     </div>
                 </div>
             </div>
@@ -525,10 +530,8 @@
         
         <!-- 自定义交互逻辑 -->
         <script>
-            // 缓存上传的原图 URL，用来做独立对比
             let cachedOriginalImageURL = null;
 
-            // 监听原生的文件上传通道，拦截并缓存原图
             document.getElementById('imageInput').addEventListener('change', function(e) {
                 const file = e.target.files[0];
                 if (file) {
@@ -537,7 +540,6 @@
                 }
             });
 
-            // 同时监听拖拽上传的拦截
             window.addEventListener('drop', function(e) {
                 const file = e.dataTransfer.files[0];
                 if (file && file.type.startsWith('image/')) {
@@ -553,7 +555,7 @@
                 document.getElementById('imageInput').click();
             });
 
-            // 2. 一键预设自动化脚本
+            // 2. 终极工业级预设参数库
             function applyPreset(type) {
                 const setMode = (id) => {
                     const btn = document.getElementById(id);
@@ -576,35 +578,36 @@
                         setMode('clustering-color');
                         setMode('clustering-stacked');
                         setMode('spline'); 
-                        setSlider('filterspeckle', 3);
-                        setSlider('length', 4);
+                        setSlider('filterspeckle', 2);
+                        setSlider('length', 3.5); // 极致精细
                         setSlider('corner', 60);
                         break;
-                    case 'qr':
-                        setMode('clustering-binary');
+                    case 'qr': // 终极防缺角二维码
+                        setMode('clustering-color');
                         setMode('clustering-cutout');
                         setMode('none'); 
                         setSlider('filterspeckle', 1);
+                        setSlider('colorprecision', 8);
                         break;
                     case 'sketch':
                         setMode('clustering-binary');
                         setMode('spline'); 
-                        setSlider('filterspeckle', 6);
-                        setSlider('splice', 70); 
+                        setSlider('filterspeckle', 5);
+                        setSlider('splice', 80); // 强力连通断笔
                         break;
                     case 'photo':
                         setMode('clustering-color');
                         setMode('clustering-stacked');
                         setMode('spline'); 
                         setSlider('colorprecision', 8); 
-                        setSlider('layerdifference', 12);
+                        setSlider('layerdifference', 8); // 色阶极度细腻
                         break;
                     case 'noisy':
                         setMode('clustering-color');
                         setMode('clustering-stacked');
                         setMode('spline'); 
-                        setSlider('filterspeckle', 12); 
-                        setSlider('length', 7); 
+                        setSlider('filterspeckle', 14); // 强力洗掉马赛克
+                        setSlider('length', 8); // 强力磨平毛边
                         break;
                 }
             }
@@ -621,19 +624,19 @@
                 dropArea.classList.add(bgStates[currentBgIndex]);
             });
 
-            // 4. 按住查看原图功能 (终极暴力拦截版：弹出我们自己独立控制的预览图层)
+            // 4. 完美比例的原图比对逻辑
             const btnCompare = document.getElementById('btn-compare');
             const previewOverlay = document.getElementById('original-preview-overlay');
             
             const showOriginal = () => {
                 if (cachedOriginalImageURL) {
-                    previewOverlay.style.display = 'block'; // 显示原图层
-                    btnCompare.classList.add('active'); // 按钮高亮
+                    previewOverlay.style.display = 'block';
+                    btnCompare.classList.add('active');
                 }
             };
             const showVector = () => {
-                previewOverlay.style.display = 'none'; // 隐藏原图层，露出矢量图
-                btnCompare.classList.remove('active'); // 取消高亮
+                previewOverlay.style.display = 'none';
+                btnCompare.classList.remove('active');
             };
             
             btnCompare.addEventListener('mousedown', showOriginal);
