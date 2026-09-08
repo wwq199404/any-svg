@@ -64,7 +64,6 @@
             .canvas-toolbar button:active {
                 transform: scale(0.96);
             }
-            /* 按住时的激活高亮效果 */
             .canvas-toolbar button.active {
                 background: #0284c7;
                 color: #fff;
@@ -109,6 +108,19 @@
             #svg > path:hover {
                 stroke: #38bdf8;
                 stroke-width: 2px;
+            }
+
+            /* 绝对管用的原图悬浮预览层 (默认隐藏) */
+            #original-preview-overlay {
+                position: absolute;
+                max-width: 100%;
+                max-height: 100%;
+                object-fit: contain;
+                border-radius: 8px;
+                box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+                z-index: 40;
+                display: none; /* 默认不显示 */
+                background: #0d0d0f;
             }
 
             #droptext {
@@ -395,6 +407,8 @@
                     </div>
                     <canvas id="frame"></canvas>
                     <svg id="svg" version="1.1" xmlns="http://www.w3.org/2000/svg"></svg>
+                    <!-- 独立拦截的预览图片层 -->
+                    <img id="original-preview-overlay" alt="Original Preview">
                 </div>
             </div>
             
@@ -511,6 +525,27 @@
         
         <!-- 自定义交互逻辑 -->
         <script>
+            // 缓存上传的原图 URL，用来做独立对比
+            let cachedOriginalImageURL = null;
+
+            // 监听原生的文件上传通道，拦截并缓存原图
+            document.getElementById('imageInput').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    cachedOriginalImageURL = URL.createObjectURL(file);
+                    document.getElementById('original-preview-overlay').src = cachedOriginalImageURL;
+                }
+            });
+
+            // 同时监听拖拽上传的拦截
+            window.addEventListener('drop', function(e) {
+                const file = e.dataTransfer.files[0];
+                if (file && file.type.startsWith('image/')) {
+                    cachedOriginalImageURL = URL.createObjectURL(file);
+                    document.getElementById('original-preview-overlay').src = cachedOriginalImageURL;
+                }
+            });
+
             // 1. 更换图片功能
             document.getElementById('reupload').addEventListener('click', function(e) {
                 e.preventDefault();
@@ -586,16 +621,18 @@
                 dropArea.classList.add(bgStates[currentBgIndex]);
             });
 
-            // 4. 按住查看原图功能 (修复版：通过彻底隐藏SVG层来完美露显底层原图)
+            // 4. 按住查看原图功能 (终极暴力拦截版：弹出我们自己独立控制的预览图层)
             const btnCompare = document.getElementById('btn-compare');
-            const svgLayer = document.getElementById('svg');
+            const previewOverlay = document.getElementById('original-preview-overlay');
             
             const showOriginal = () => {
-                svgLayer.style.display = 'none'; // 彻底隐藏矢量图层，露出原图Canvas
-                btnCompare.classList.add('active'); // 按钮变蓝高亮
+                if (cachedOriginalImageURL) {
+                    previewOverlay.style.display = 'block'; // 显示原图层
+                    btnCompare.classList.add('active'); // 按钮高亮
+                }
             };
             const showVector = () => {
-                svgLayer.style.display = 'block'; // 恢复显示矢量图层
+                previewOverlay.style.display = 'none'; // 隐藏原图层，露出矢量图
                 btnCompare.classList.remove('active'); // 取消高亮
             };
             
