@@ -153,8 +153,56 @@
                 color: #71717a;
             }
 
-            /* 现代高光导出按钮 */
+            /* 交互式预设卡片样式 */
+            .preset-card {
+                cursor: pointer;
+                background: rgba(24, 24, 27, 0.6);
+                border: 1px solid #27272a;
+                padding: 10px 12px;
+                border-radius: 6px;
+                margin-bottom: 8px;
+                transition: all 0.2s ease;
+            }
+            .preset-card:hover {
+                background: rgba(56, 189, 248, 0.08);
+                border-color: rgba(56, 189, 248, 0.4);
+                transform: translateX(2px);
+            }
+            .preset-card-title {
+                color: #e4e4e7;
+                font-size: 12px;
+                font-weight: 600;
+                margin-bottom: 4px;
+                display: flex;
+                justify-content: space-between;
+            }
+            .preset-card-title span {
+                font-size: 10px;
+                color: #38bdf8;
+                opacity: 0;
+                transition: opacity 0.2s;
+            }
+            .preset-card:hover .preset-card-title span {
+                opacity: 1;
+            }
+            .preset-card-desc {
+                font-size: 11px;
+                color: #a1a1aa;
+                line-height: 1.5;
+            }
+
+            /* 操作按钮组 */
+            .action-buttons {
+                display: flex;
+                gap: 10px;
+                background: transparent !important;
+                border: none !important;
+                padding: 0 !important;
+                margin-bottom: 14px !important;
+            }
+
             #export {
+                flex: 1.5;
                 cursor: pointer;
                 font-family: inherit;
                 font-weight: 600;
@@ -163,8 +211,7 @@
                 border: none;
                 background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
                 color: #fff;
-                padding: 10px 16px;
-                width: 100%;
+                padding: 10px 0;
                 text-align: center;
                 text-decoration: none;
                 display: block;
@@ -176,6 +223,31 @@
                 background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
                 box-shadow: 0 6px 18px rgba(2, 132, 199, 0.5);
                 transform: translateY(-1px);
+            }
+
+            #reupload {
+                flex: 1;
+                cursor: pointer;
+                font-family: inherit;
+                font-weight: 600;
+                font-size: 13px;
+                border-radius: 6px;
+                border: 1px solid #3f3f46;
+                background: #18181b;
+                color: #d4d4d8;
+                padding: 10px 0;
+                text-align: center;
+                text-decoration: none;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                box-sizing: border-box;
+                transition: all 0.2s ease;
+            }
+            #reupload:hover {
+                background: #27272a;
+                color: #fff;
+                border-color: #52525b;
             }
 
             /* 选项切换按钮组 */
@@ -249,6 +321,7 @@
 
     <body>
         <input type="file" id="imageInput" accept="image/*" style="display: none;">
+        
         <div>
             <!-- 顶部纤细进度条 -->
             <div id="progressregion" style="display: none; position: absolute; top: 0; left: 0; width: calc(100% - 360px); z-index: 10;">
@@ -270,11 +343,12 @@
             <!-- 右侧控制面板 -->
             <div id="options">
                 <div class="app-header">
-                    <span class="app-title">⚡ 饼饼 Studio</span>
+                    <span class="app-title">⚡ 小饼饼 Studio</span>
                     <span class="app-subtitle">中文增强版</span>
                 </div>
 
-                <div class="option-block" style="background: transparent; border: none; padding: 0; margin-bottom: 12px;">
+                <div class="option-block action-buttons">
+                    <a id="reupload">更换图片</a>
                     <a id="export">导出 SVG 矢量图</a>
                 </div>
 
@@ -340,8 +414,113 @@
                     <div id="pathprecisionvalue">8</div>
                     <input id="pathprecision" type="range" min="0" max="16" step="1" value="8">
                 </div>
+
+                <hr style="border: none; border-top: 1px solid #1e1e24; margin: 20px 0;">
+                
+                <!-- 可交互：一键预设场景卡片 -->
+                <div class="option-block" style="background: rgba(56, 189, 248, 0.05); border-color: rgba(56, 189, 248, 0.2);">
+                    <div class="option-label" style="color: #38bdf8; font-size: 13px; margin-bottom: 12px;">
+                        💡 一键“抄作业”预设 (点击应用)
+                    </div>
+                    
+                    <div class="preset-card" onclick="applyPreset('logo')">
+                        <div class="preset-card-title">✨ 放大 Logo / 图标 <span>点击应用</span></div>
+                        <div class="preset-card-desc">自动调整为高清圆润，保住小弧线，抹除微小噪点。</div>
+                    </div>
+                    
+                    <div class="preset-card" onclick="applyPreset('qr')">
+                        <div class="preset-card-title">🔳 放大二维码 <span>点击应用</span></div>
+                        <div class="preset-card-desc">自动调整为绝对方正锐利，保留所有关键小黑点。</div>
+                    </div>
+
+                    <div class="preset-card" onclick="applyPreset('sketch')">
+                        <div class="preset-card-title">✏️ 提取手绘线稿 / 签名 <span>点击应用</span></div>
+                        <div class="preset-card-desc">自动连接断掉的笔画，强制抹掉背景纸张阴影。</div>
+                    </div>
+
+                    <div class="preset-card" onclick="applyPreset('photo')">
+                        <div class="preset-card-title">📸 照片 / 复杂插画 <span>点击应用</span></div>
+                        <div class="preset-card-desc">色彩精度拉满，色彩过渡更自然逼真。</div>
+                    </div>
+
+                    <div class="preset-card" onclick="applyPreset('noisy')">
+                        <div class="preset-card-title">👻 抢救模糊包浆图 <span>点击应用</span></div>
+                        <div class="preset-card-desc">强行抹掉马赛克噪点，无视原本坑坑洼洼的边缘。</div>
+                    </div>
+                </div>
             </div>
         </div>
+        
         <script src="./bootstrap.js"></script>
+        
+        <!-- 自定义交互逻辑 -->
+        <script>
+            // 1. 更换图片功能
+            document.getElementById('reupload').addEventListener('click', function(e) {
+                e.preventDefault();
+                document.getElementById('imageInput').value = ''; 
+                document.getElementById('imageInput').click();
+            });
+
+            // 2. 一键预设自动化脚本
+            function applyPreset(type) {
+                // 安全点击按钮的辅助函数（只有没选中时才点击）
+                const setMode = (id) => {
+                    const btn = document.getElementById(id);
+                    if (btn && !btn.classList.contains('selected')) {
+                        btn.click();
+                    }
+                };
+
+                // 安全拖拽滑块并触发底层渲染的辅助函数
+                const setSlider = (id, val) => {
+                    const slider = document.getElementById(id);
+                    if (slider) {
+                        slider.value = val;
+                        // 触发底层 WASM 引擎的实时更新
+                        slider.dispatchEvent(new Event('input', { bubbles: true }));
+                        slider.dispatchEvent(new Event('change', { bubbles: true }));
+                    }
+                };
+
+                // 核心预设参数库
+                switch(type) {
+                    case 'logo':
+                        setMode('clustering-color');
+                        setMode('clustering-stacked');
+                        setMode('spline'); // 平滑曲线
+                        setSlider('filterspeckle', 3);
+                        setSlider('length', 4);
+                        setSlider('corner', 60);
+                        break;
+                    case 'qr':
+                        setMode('clustering-binary');
+                        setMode('clustering-cutout');
+                        setMode('none'); // 像素边界
+                        setSlider('filterspeckle', 1);
+                        break;
+                    case 'sketch':
+                        setMode('clustering-binary');
+                        setMode('spline'); // 平滑曲线
+                        setSlider('filterspeckle', 6);
+                        setSlider('splice', 70); // 连通断点
+                        break;
+                    case 'photo':
+                        setMode('clustering-color');
+                        setMode('clustering-stacked');
+                        setMode('spline'); // 平滑曲线
+                        setSlider('colorprecision', 8); // 色彩拉满
+                        setSlider('layerdifference', 12);
+                        break;
+                    case 'noisy':
+                        setMode('clustering-color');
+                        setMode('clustering-stacked');
+                        setMode('spline'); // 平滑曲线
+                        setSlider('filterspeckle', 12); // 强行抹除杂点
+                        setSlider('length', 7); // 强行平滑
+                        break;
+                }
+            }
+        </script>
     </body>
 </html>
