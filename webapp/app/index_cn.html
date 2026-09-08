@@ -64,6 +64,12 @@
             .canvas-toolbar button:active {
                 transform: scale(0.96);
             }
+            /* 按住时的激活高亮效果 */
+            .canvas-toolbar button.active {
+                background: #0284c7;
+                color: #fff;
+                border-color: #38bdf8;
+            }
 
             /* 背景切换状态 */
             #drop {
@@ -99,10 +105,6 @@
                 object-fit: contain;
                 border-radius: 8px;
                 box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-            }
-            /* 让 SVG 图层在切换原图时过渡平滑 */
-            #svg {
-                transition: opacity 0.15s ease;
             }
             #svg > path:hover {
                 stroke: #38bdf8;
@@ -380,7 +382,7 @@
             <!-- 左侧画布渲染区 -->
             <div id="canvas-container">
                 
-                <!-- 新增：悬浮工具栏 -->
+                <!-- 悬浮工具栏 -->
                 <div class="canvas-toolbar">
                     <button id="btn-bg-switch" title="切换背景 (暗色/亮色/透明棋盘格)">🌓 切换背景</button>
                     <button id="btn-compare" title="按住鼠标对比原始图片">👀 按住看原图</button>
@@ -572,7 +574,7 @@
                 }
             }
 
-            // 3. 切换背景功能 (黑/白/透明棋盘格循环)
+            // 3. 切换背景功能
             const btnBgSwitch = document.getElementById('btn-bg-switch');
             const dropArea = document.getElementById('drop');
             const bgStates = ['bg-dark', 'bg-light', 'bg-checker'];
@@ -584,17 +586,22 @@
                 dropArea.classList.add(bgStates[currentBgIndex]);
             });
 
-            // 4. 按住查看原图功能 (隐藏SVG层，露出底层的Canvas原图)
+            // 4. 按住查看原图功能 (修复版：通过彻底隐藏SVG层来完美露显底层原图)
             const btnCompare = document.getElementById('btn-compare');
             const svgLayer = document.getElementById('svg');
             
-            const showOriginal = () => { svgLayer.style.opacity = '0'; };
-            const showVector = () => { svgLayer.style.opacity = '1'; };
+            const showOriginal = () => {
+                svgLayer.style.display = 'none'; // 彻底隐藏矢量图层，露出原图Canvas
+                btnCompare.classList.add('active'); // 按钮变蓝高亮
+            };
+            const showVector = () => {
+                svgLayer.style.display = 'block'; // 恢复显示矢量图层
+                btnCompare.classList.remove('active'); // 取消高亮
+            };
             
-            // 兼容鼠标和手机触摸
             btnCompare.addEventListener('mousedown', showOriginal);
             btnCompare.addEventListener('mouseup', showVector);
-            btnCompare.addEventListener('mouseleave', showVector); // 防止鼠标移出按钮后卡住
+            btnCompare.addEventListener('mouseleave', showVector);
             btnCompare.addEventListener('touchstart', (e) => { e.preventDefault(); showOriginal(); });
             btnCompare.addEventListener('touchend', (e) => { e.preventDefault(); showVector(); });
         </script>
