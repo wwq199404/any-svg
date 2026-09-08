@@ -31,6 +31,41 @@
                 align-items: center;
                 background: radial-gradient(circle at center, #18181b 0%, #0d0d0f 100%);
             }
+            
+            /* 画布左上角悬浮工具栏 */
+            .canvas-toolbar {
+                position: absolute;
+                top: 20px;
+                left: 20px;
+                display: flex;
+                gap: 10px;
+                z-index: 50;
+            }
+            .canvas-toolbar button {
+                background: rgba(24, 24, 27, 0.6);
+                border: 1px solid #3f3f46;
+                color: #d4d4d8;
+                padding: 8px 12px;
+                border-radius: 6px;
+                font-size: 12px;
+                cursor: pointer;
+                backdrop-filter: blur(4px);
+                transition: all 0.2s;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                user-select: none;
+            }
+            .canvas-toolbar button:hover {
+                background: rgba(39, 39, 42, 0.9);
+                color: #fff;
+                border-color: #52525b;
+            }
+            .canvas-toolbar button:active {
+                transform: scale(0.96);
+            }
+
+            /* 背景切换状态 */
             #drop {
                 width: 92%;
                 height: 92%;
@@ -38,7 +73,25 @@
                 justify-content: center;
                 align-items: center;
                 position: relative;
+                border-radius: 12px;
+                transition: background 0.3s ease;
             }
+            .bg-dark {
+                background-color: transparent;
+            }
+            .bg-light {
+                background-color: #f4f4f5;
+                box-shadow: inset 0 0 0 1px #e4e4e7;
+            }
+            .bg-checker {
+                background-color: #ffffff;
+                background-image: linear-gradient(45deg, #e4e4e7 25%, transparent 25%, transparent 75%, #e4e4e7 75%, #e4e4e7), 
+                                  linear-gradient(45deg, #e4e4e7 25%, transparent 25%, transparent 75%, #e4e4e7 75%, #e4e4e7);
+                background-size: 20px 20px;
+                background-position: 0 0, 10px 10px;
+                box-shadow: inset 0 0 0 1px #e4e4e7;
+            }
+
             #svg, #frame {
                 position: absolute;
                 max-width: 100%;
@@ -47,10 +100,15 @@
                 border-radius: 8px;
                 box-shadow: 0 20px 40px rgba(0,0,0,0.6);
             }
+            /* 让 SVG 图层在切换原图时过渡平滑 */
+            #svg {
+                transition: opacity 0.15s ease;
+            }
             #svg > path:hover {
                 stroke: #38bdf8;
                 stroke-width: 2px;
             }
+
             #droptext {
                 width: 100%;
                 height: 100%;
@@ -101,7 +159,6 @@
                 border-radius: 3px;
             }
             
-            /* 品牌头部标题栏 */
             .app-header {
                 display: flex;
                 align-items: center;
@@ -125,7 +182,6 @@
                 border: 1px solid #27272a;
             }
 
-            /* 模块卡片容器 */
             .option-block {
                 background: #18181b;
                 border: 1px solid #222226;
@@ -153,7 +209,6 @@
                 color: #71717a;
             }
 
-            /* 交互式预设卡片样式 */
             .preset-card {
                 cursor: pointer;
                 background: rgba(24, 24, 27, 0.6);
@@ -191,7 +246,6 @@
                 line-height: 1.5;
             }
 
-            /* 操作按钮组 */
             .action-buttons {
                 display: flex;
                 gap: 10px;
@@ -200,7 +254,6 @@
                 padding: 0 !important;
                 margin-bottom: 14px !important;
             }
-
             #export {
                 flex: 1.5;
                 cursor: pointer;
@@ -224,7 +277,6 @@
                 box-shadow: 0 6px 18px rgba(2, 132, 199, 0.5);
                 transform: translateY(-1px);
             }
-
             #reupload {
                 flex: 1;
                 cursor: pointer;
@@ -250,7 +302,6 @@
                 border-color: #52525b;
             }
 
-            /* 选项切换按钮组 */
             .btn-group-2 {
                 display: grid;
                 grid-template-columns: 1fr 1fr;
@@ -285,7 +336,6 @@
                 box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
             }
 
-            /* 滑块控件 */
             input[type="range"] {
                 -webkit-appearance: none;
                 width: 100%;
@@ -309,7 +359,6 @@
                 transform: scale(1.25);
             }
             
-            /* 数值统计展示 */
             #filterspecklevalue, #colorprecisionvalue, #layerdifferencevalue, #cornervalue, #lengthvalue, #splicevalue, #pathprecisionvalue {
                 font-size: 11px;
                 color: #71717a;
@@ -330,7 +379,14 @@
             
             <!-- 左侧画布渲染区 -->
             <div id="canvas-container">
-                <div id="drop">
+                
+                <!-- 新增：悬浮工具栏 -->
+                <div class="canvas-toolbar">
+                    <button id="btn-bg-switch" title="切换背景 (暗色/亮色/透明棋盘格)">🌓 切换背景</button>
+                    <button id="btn-compare" title="按住鼠标对比原始图片">👀 按住看原图</button>
+                </div>
+
+                <div id="drop" class="bg-dark">
                     <div id="droptext">
                         <p style="margin: 0 0 6px 0; font-weight: 500;">将图片拖拽至此区域</p>
                         <p style="margin: 0; font-size: 12px; color: #52525b;">支持 PNG / JPG / WebP 或 <a href="#" id="imageSelect">浏览文件</a></p>
@@ -343,7 +399,7 @@
             <!-- 右侧控制面板 -->
             <div id="options">
                 <div class="app-header">
-                    <span class="app-title">⚡ 小饼饼 Studio</span>
+                    <span class="app-title">⚡ 饼饼 Studio</span>
                     <span class="app-subtitle">中文增强版</span>
                 </div>
 
@@ -409,7 +465,6 @@
                     <input id="splice" type="range" min="0" max="180" step="1" value="45">
                 </div>
 
-                <!-- 隐藏的路径精度参数 -->
                 <div style="display: none;">
                     <div id="pathprecisionvalue">8</div>
                     <input id="pathprecision" type="range" min="0" max="16" step="1" value="8">
@@ -417,7 +472,6 @@
 
                 <hr style="border: none; border-top: 1px solid #1e1e24; margin: 20px 0;">
                 
-                <!-- 可交互：一键预设场景卡片 -->
                 <div class="option-block" style="background: rgba(56, 189, 248, 0.05); border-color: rgba(56, 189, 248, 0.2);">
                     <div class="option-label" style="color: #38bdf8; font-size: 13px; margin-bottom: 12px;">
                         💡 一键“抄作业”预设 (点击应用)
@@ -464,7 +518,6 @@
 
             // 2. 一键预设自动化脚本
             function applyPreset(type) {
-                // 安全点击按钮的辅助函数（只有没选中时才点击）
                 const setMode = (id) => {
                     const btn = document.getElementById(id);
                     if (btn && !btn.classList.contains('selected')) {
@@ -472,23 +525,20 @@
                     }
                 };
 
-                // 安全拖拽滑块并触发底层渲染的辅助函数
                 const setSlider = (id, val) => {
                     const slider = document.getElementById(id);
                     if (slider) {
                         slider.value = val;
-                        // 触发底层 WASM 引擎的实时更新
                         slider.dispatchEvent(new Event('input', { bubbles: true }));
                         slider.dispatchEvent(new Event('change', { bubbles: true }));
                     }
                 };
 
-                // 核心预设参数库
                 switch(type) {
                     case 'logo':
                         setMode('clustering-color');
                         setMode('clustering-stacked');
-                        setMode('spline'); // 平滑曲线
+                        setMode('spline'); 
                         setSlider('filterspeckle', 3);
                         setSlider('length', 4);
                         setSlider('corner', 60);
@@ -496,31 +546,57 @@
                     case 'qr':
                         setMode('clustering-binary');
                         setMode('clustering-cutout');
-                        setMode('none'); // 像素边界
+                        setMode('none'); 
                         setSlider('filterspeckle', 1);
                         break;
                     case 'sketch':
                         setMode('clustering-binary');
-                        setMode('spline'); // 平滑曲线
+                        setMode('spline'); 
                         setSlider('filterspeckle', 6);
-                        setSlider('splice', 70); // 连通断点
+                        setSlider('splice', 70); 
                         break;
                     case 'photo':
                         setMode('clustering-color');
                         setMode('clustering-stacked');
-                        setMode('spline'); // 平滑曲线
-                        setSlider('colorprecision', 8); // 色彩拉满
+                        setMode('spline'); 
+                        setSlider('colorprecision', 8); 
                         setSlider('layerdifference', 12);
                         break;
                     case 'noisy':
                         setMode('clustering-color');
                         setMode('clustering-stacked');
-                        setMode('spline'); // 平滑曲线
-                        setSlider('filterspeckle', 12); // 强行抹除杂点
-                        setSlider('length', 7); // 强行平滑
+                        setMode('spline'); 
+                        setSlider('filterspeckle', 12); 
+                        setSlider('length', 7); 
                         break;
                 }
             }
+
+            // 3. 切换背景功能 (黑/白/透明棋盘格循环)
+            const btnBgSwitch = document.getElementById('btn-bg-switch');
+            const dropArea = document.getElementById('drop');
+            const bgStates = ['bg-dark', 'bg-light', 'bg-checker'];
+            let currentBgIndex = 0;
+            
+            btnBgSwitch.addEventListener('click', () => {
+                dropArea.classList.remove(bgStates[currentBgIndex]);
+                currentBgIndex = (currentBgIndex + 1) % bgStates.length;
+                dropArea.classList.add(bgStates[currentBgIndex]);
+            });
+
+            // 4. 按住查看原图功能 (隐藏SVG层，露出底层的Canvas原图)
+            const btnCompare = document.getElementById('btn-compare');
+            const svgLayer = document.getElementById('svg');
+            
+            const showOriginal = () => { svgLayer.style.opacity = '0'; };
+            const showVector = () => { svgLayer.style.opacity = '1'; };
+            
+            // 兼容鼠标和手机触摸
+            btnCompare.addEventListener('mousedown', showOriginal);
+            btnCompare.addEventListener('mouseup', showVector);
+            btnCompare.addEventListener('mouseleave', showVector); // 防止鼠标移出按钮后卡住
+            btnCompare.addEventListener('touchstart', (e) => { e.preventDefault(); showOriginal(); });
+            btnCompare.addEventListener('touchend', (e) => { e.preventDefault(); showVector(); });
         </script>
     </body>
 </html>
