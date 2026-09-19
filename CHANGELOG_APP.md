@@ -2,6 +2,22 @@
 
 All notable changes to the VTracer desktop app will be documented in this file.
 
+## 1.0.0-alpha.4 - Build 173 - 2026-09-17
+
+### Added (Gen AI)
+
+* Now supports graphic generation using OpenAI Codex. You have to authenticate Codex yourself, and it consumes token from your plan. The prompt will be sent to OpenAI
+
+## 1.0.0-alpha.4 - Build 166 - 2026-09-16
+
+### Added
+
+* VTracer 2 now picks the optimal Gradient Step on first trace
+
+### Fixed
+
+* Remove Background stayed on but stopped showing on the canvas after switching tabs.
+
 ## 1.0.0-alpha.4 - Build 161 - 2026-09-12
 
 ### Added
