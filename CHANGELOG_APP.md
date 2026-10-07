@@ -2,6 +2,42 @@
 
 All notable changes to the VTracer desktop app will be documented in this file.
 
+## 1.0.0-alpha.4 - Build 208 - 2026-10-02
+
+### Added
+
+* Fact sheet now translated to Chinese
+
+### Added (Gen AI)
+
+* Added reference image mode for FLUX 2
+
+## 1.0.0-alpha.4 - Build 201 - 2026-09-29
+
+### Added
+
+* Support sign in with Microsoft account
+
+## 1.0.0-alpha.4 - Build 197 - 2026-09-28
+
+### Added
+
+* Renew trial license in app by submitting feature request or testimonial.
+
+### Added (Gen AI)
+
+* Support Z-Image model family.
+
+### Fixed
+
+* Reinstall on same machine now replaces a seat instead of error.
+
+## 1.0.0-alpha.4 - Build 188 - 2026-09-28
+
+### Added (Gen AI)
+
+* Support image-to-image generation. You can now provide a pencil sketch together with a prompt.
+
 ## 1.0.0-alpha.4 - Build 180 - 2026-09-19
 
 ### Added
